@@ -1,0 +1,32 @@
+.TerminalButton{
+    background-color: #040A1A;
+    font-family: 'JetBrains Mono', monospace;
+    color: #53CBFA;
+    padding: 5px 0;
+    text-align: left;
+    border: none;
+    flex-direction: column;
+}
+.TerminalButton:hover,
+.TerminalButton:focus,
+.TerminalButton:hover{
+    background-color: #040A1A;
+    box-shadow: none;
+    color: #85d1f8;
+    font-size: large;
+    outline: 0;
+    border: none;
+}
+.content {
+    display: flex;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    flex-direction: column;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.content.expanded {
+    opacity: 1;
+    max-height: 200px; /* A value larger than the max possible content height */
+}

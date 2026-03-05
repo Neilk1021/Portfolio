@@ -1,0 +1,9 @@
+.RouterLink{
+    background-color: #040A1A;
+    font-family: 'JetBrains Mono', monospace;
+    color: #53CBFA;
+    padding: 5px 20px;
+    text-align: left;
+    border: none;
+    font-size: smaller;
+}
