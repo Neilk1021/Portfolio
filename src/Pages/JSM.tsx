@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 import preview_one from '../assets/jsm_test_one.jpg'
 import preview_two from '../assets/jsm_test_two.jpg'
-import preview_three from '../assets/jsm_test_three.jpg'
+
 
 function JSM(){
 

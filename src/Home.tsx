@@ -15,7 +15,7 @@ function Home() {
         <ExpandableButton name={"Games"} children={
             <>
                 <RouterLink name="Japanese Salaryman" link={"japanese_salaryman"}/>
-                <RouterLink name="Salaryman Surveillance" link={"japanese_salaryman"}/>
+                <RouterLink name="Salaryman Surveillance" link={"surveillance"}/>
                 <RouterLink name="S.A.R.G.E" link={"japanese_salaryman"}/>
                 <RouterLink name="Dope Ass Game Simulator" link={"japanese_salaryman"}/>
                 <RouterLink name="Ultracult" link={"japanese_salaryman"}/>
