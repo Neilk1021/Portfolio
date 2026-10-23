@@ -1,31 +1,39 @@
-import './ExpandableButton.css'
-import {useState} from "react";
-import * as React from "react";
+import './ExpandableButton.css';
+import { useId, useState } from 'react';
+import type { ReactNode } from 'react';
 
 interface Props {
-    name : string;
-    children?: React.ReactNode;
+  name: string;
+  children?: ReactNode;
+  defaultOpen?: boolean;
 }
 
-function ExpandableButton({name, children} : Props) {
-    const [isExpanded, setIsExpanded] = useState(false);
+function ExpandableButton({ name, children, defaultOpen = false }: Props) {
+  const [isExpanded, setIsExpanded] = useState(defaultOpen);
+  const panelId = useId();
 
-    const OnClick = () => {
-        setIsExpanded(!isExpanded);
-    }
-
-    return (
-        <div>
-            <button
-                className={"TerminalButton"}
-                onClick={OnClick}
-            >{name}
-            </button>
-            <div className={`content ${isExpanded ? 'expanded' : ''}`}>
-                {children}
-            </div>
-        </div>
-    )
+  return (
+    <div>
+      <button
+        type="button"
+        className="TerminalButton"
+        aria-expanded={isExpanded}
+        aria-controls={panelId}
+        onClick={() => setIsExpanded((v) => !v)}
+      >
+        {name}
+      </button>
+      {/* `inert` matters: without it the collapsed links stay keyboard
+          focusable inside a zero-height box, so Tab lands on nothing. */}
+      <div
+        id={panelId}
+        inert={!isExpanded}
+        className={`content ${isExpanded ? 'expanded' : ''}`}
+      >
+        <div className="content-inner">{children}</div>
+      </div>
+    </div>
+  );
 }
 
 export default ExpandableButton;

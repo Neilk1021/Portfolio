@@ -1,0 +1,12 @@
+.TermLink {
+  color: var(--fg);
+  text-decoration: underline;
+  font-size: var(--fs-small);
+  transition: color var(--t-fast);
+  white-space: nowrap;
+}
+
+.TermLink:hover,
+.TermLink:focus-visible {
+  color: var(--fg-bright);
+}

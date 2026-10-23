@@ -1,69 +1,332 @@
+/* ==========================================================================
+   Design tokens. Every value here is lifted from what the site already used,
+   so introducing them changed nothing visually.
+
+   Breakpoints are deliberately NOT tokens: var() does not work inside @media.
+   The two literals used below are 900px (md) and 560px (sm).
+   ========================================================================== */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* palette */
+  --bg:         #040A1A;
+  --bg-inset:   #000000;
+  --fg:         #53CBFA;
+  --fg-bright:  #85d1f8;
+  --fg-a30:     rgba(83, 203, 250, 0.30);
+  --fg-a15:     rgba(83, 203, 250, 0.15);
+  --fg-a40:     rgba(83, 203, 250, 0.40);
+  --rule:       #1a2a4a;
+  --danger:     #ff5555;
+  --ok:         #5affa0;
+
+  /* type */
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+               'DejaVu Sans Mono', monospace;
+  --fs-h1:        1.5rem;
+  --fs-h2:        1.15rem;
+  --fs-nav:       1.1rem;
+  --fs-nav-hover: 1.25rem;
+  --fs-body:      0.95rem;
+  --fs-small:     0.85rem;
+  --fs-micro:     0.72rem;
+
+  /* space */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 1rem;
+  --sp-4: 1.5rem;
+  --sp-5: 2.5rem;
+  --sp-6: 4rem;
+  --gutter: clamp(1rem, 3vw, 3rem);
+  --measure: 72ch;
+  /* Long-form prose only. 72ch is right for a project spec sheet but cramped
+     for an essay: JetBrains Mono advances 0.6em per character, so 72ch is only
+     ~657px and left a dead half-window on a desktop. */
+  --measure-prose: 88ch;
+
+  /* chrome */
+  --border:      1px solid var(--fg);
+  --rule-dash:   1px dashed var(--fg-a30);
+  --t-fast:      0.2s ease;
+  --t-slow:      0.5s ease-in-out;
+
+  font-family: var(--font-mono);
+  background-color: var(--bg);
+  color: var(--fg);
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  interpolate-size: allow-keywords; /* Enables keyword animation */
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
   margin: 0;
+  background-color: var(--bg);
+}
+
+/* Form controls don't inherit type by default, and this site is all one face. */
+input, textarea, button, select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Links were carrying an inline colour on every single call site because this
+   rule didn't exist. */
+a {
+  color: var(--fg);
+}
+
+img, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   Page frame
+
+   Left-aligned, NOT centred. A terminal hugs the left edge of the window -
+   centring a max-width column leaves a huge dead gutter on a wide display
+   (on 2560px a 1280px centred column starts 640px in) and reads nothing like
+   a shell. Width is constrained further down by --measure on .TerminalContent
+   and by the max-widths on .Left/.Right, so there's no need to cap it here.
+
+   The gutter lives here rather than on #root, so children don't need 100vw to
+   escape a clamp. 100vw includes the scrollbar gutter and was the actual source
+   of the horizontal overflow that `body { overflow-x: hidden }` was hiding.
+   ========================================================================== */
+.Page {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  padding-inline: var(--gutter);
+  /* Same token as the horizontal inset, so the top offset always visually
+     matches the left one. These used to be independent values and drifted:
+     a fixed 56px top against a ~30px fluid left gutter read as twice the gap. */
+  padding-block-start: var(--gutter);
+  box-sizing: border-box;
+  text-align: left;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.TerminalHeader {
+  display: block;
+  /* No top spacing of its own - .Page owns the inset. */
+  margin: 0;
+  padding: 0 0 var(--sp-3);
+  text-align: left;
+  text-decoration: none;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.TerminalHeader h1 {
+  margin: 0;
+  font-size: var(--fs-h1);
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+.TerminalHeader:hover h1 {
+  color: var(--fg-bright);
+}
+
+.TerminalContent {
+  padding: var(--sp-2) 0 var(--sp-6);
+  text-align: left;
+  max-width: var(--measure);
+}
+
+/* Two-column body shared by every project page. */
+.body {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  gap: var(--sp-5);
+  align-items: flex-start;
+  padding-bottom: var(--sp-6);
+}
+
+.Left {
+  flex: 2;
+  min-width: 0;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+}
+
+.Right {
+  flex: 0.8;
+  min-width: 0;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* ==========================================================================
+   Global element styles
+   ========================================================================== */
+h2 {
+  font-size: var(--fs-h2);
+  text-align: left;
+  color: var(--fg);
+  margin: var(--sp-4) 0 var(--sp-2);
+}
+
+h3 {
+  font-size: 1rem;
+  color: var(--fg);
+  margin: var(--sp-3) 0 var(--sp-1);
+}
+
+p {
+  text-align: left;
+  color: var(--fg-bright);
+  font-size: var(--fs-body);
+  margin: var(--sp-2) 0;
+}
+
+ul {
+  list-style-type: square;
+  padding-left: 20px;
+  margin: var(--sp-2) 0;
+}
+
+/* Scoped to unclassed lists only - i.e. prose.
+   `content` on ::marker OVERRIDES `list-style: none`, so an unscoped rule here
+   puts a stray "- " outside the box of every list we style as a non-list
+   (gallery dots, tech tags, compact entries, the PR list). Layout lists all
+   carry a class; markdown and body-copy lists don't. */
+ul:not([class]) li::marker {
+  content: '- ';
+  color: var(--fg);
+}
+
+li {
+  color: var(--fg-bright);
+  font-size: var(--fs-body);
+}
+
+hr {
+  border: 0;
+  border-top: var(--rule-dash);
+  margin: var(--sp-4) 0;
+}
+
+/* ==========================================================================
+   Nav
+   ========================================================================== */
+.TerminalButton, .StaticLink {
+  background-color: transparent;
+  font-family: var(--font-mono);
+  color: var(--fg);
+  padding: var(--sp-1) 0;
+  margin: var(--sp-1) 0;
+  text-align: left;
+  border: none;
+  display: block;
+  width: fit-content;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: color var(--t-fast), transform var(--t-fast);
+  text-decoration: none;
+  font-size: var(--fs-nav);
+  /* scale instead of font-size so hovering doesn't reflow the whole column */
+  transform-origin: left center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.TerminalButton:hover, .StaticLink:hover,
+.TerminalButton:focus-visible, .StaticLink:focus-visible {
+  color: var(--fg-bright);
+  transform: scale(1.08);
+  outline: none;
+}
+
+.TerminalButton:focus-visible, .StaticLink:focus-visible {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Dividers / meta / tags, shared by project + experience pages
+   ========================================================================== */
+.Rule {
+  border-top: var(--rule-dash);
+  margin: var(--sp-4) 0;
+}
+
+.Tagline {
+  color: var(--fg);
+  font-size: var(--fs-body);
+  margin: 0 0 var(--sp-3);
+}
+
+.TechTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: var(--sp-3) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.TechTags li {
+  border: 1px solid var(--fg-a40);
+  padding: 2px var(--sp-2);
+  font-size: var(--fs-micro);
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.MetaTable {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--sp-1) var(--sp-3);
+  margin: var(--sp-3) 0;
+  font-size: var(--fs-small);
+}
+
+.MetaTable dt {
+  color: var(--fg);
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+.MetaTable dd {
+  margin: 0;
+  color: var(--fg-bright);
+}
+
+.LinkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+}
+
+.Quote {
+  font-style: italic;
+  color: var(--fg);
+  border-left: var(--rule-dash);
+  padding-left: var(--sp-3);
+  margin: var(--sp-3) 0;
+}
+
+@media (max-width: 900px) {
+  .body {
+    flex-direction: column;
+    gap: var(--sp-4);
+    /* Must be reset with the direction. `flex-start` is there to top-align the
+       two desktop columns, but on the cross axis of a COLUMN flex container it
+       makes children shrink-to-fit their max-content width, so long paragraphs
+       size to their unwrapped length and overflow the viewport. */
+    align-items: stretch;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+  .Left, .Right { flex: none; width: auto; max-width: none; min-width: 0; }
+}
+
+@media (max-width: 560px) {
+  :root { --gutter: var(--sp-3); --fs-h1: 1.2rem; --sp-6: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }

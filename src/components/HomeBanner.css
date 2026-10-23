@@ -1,0 +1,80 @@
+.Banner {
+  /* Same measure as the rest of the site, so it does not sprawl across a wide
+     display while every other page stays readable. */
+  max-width: var(--measure);
+  padding-top: var(--sp-3);
+}
+
+.Prompt {
+  color: var(--fg);
+  opacity: 0.55;
+  font-size: var(--fs-small);
+  margin: 0;
+}
+
+.Prompt + .BannerName { margin-top: var(--sp-2); }
+
+.PromptMark {
+  color: var(--fg);
+  opacity: 0.8;
+  margin-right: var(--sp-2);
+}
+
+.BannerName {
+  color: var(--fg);
+  font-size: 1.25rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.BannerLede {
+  color: var(--fg-bright);
+  font-size: var(--fs-body);
+  margin: var(--sp-1) 0 var(--sp-4);
+}
+
+.BannerRows {
+  display: grid;
+  /* one fixed label column keeps the values on a single left edge */
+  grid-template-columns: 6.5rem 1fr;
+  gap: var(--sp-2) var(--sp-3);
+  margin: 0 0 var(--sp-5);
+  font-size: var(--fs-small);
+  border-left: 1px solid var(--fg-a30);
+  padding-left: var(--sp-3);
+}
+
+.BannerRows dt {
+  color: var(--fg);
+  opacity: 0.55;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.BannerRows dd {
+  margin: 0;
+  color: var(--fg-bright);
+  min-width: 0;
+}
+
+.BannerRows a {
+  color: var(--fg-bright);
+  text-decoration: underline;
+  text-decoration-color: var(--fg-a40);
+}
+
+.BannerRows a:hover,
+.BannerRows a:focus-visible {
+  color: var(--fg);
+  text-decoration-color: var(--fg);
+}
+
+@media (max-width: 620px) {
+  .BannerRows {
+    grid-template-columns: 1fr;
+    gap: 0;
+    row-gap: var(--sp-1);
+  }
+  .BannerRows dt { margin-top: var(--sp-2); font-size: var(--fs-micro); }
+  .BannerName { font-size: 1.1rem; }
+}

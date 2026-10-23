@@ -1,0 +1,113 @@
+rules_version = '2';
+
+// These rules - not the client - are what actually authorize reads and writes.
+// The admin page only decides what UI to show; anyone can talk to Firestore
+// directly using the public web config that ships in the bundle.
+//
+// SETUP: replace us4AEjRgfadGLxj6CGY9ugRH7o72 with your Firebase Auth uid
+// (Firebase console -> Authentication -> Users), then deploy:
+//   firebase deploy --only firestore:rules
+//
+// The uid check is deliberate. `request.auth != null` would NOT be safe: with
+// the Email/Password provider enabled, anyone can call
+// createUserWithEmailAndPassword from any client and become "authenticated".
+// Disable self-signup in the console as well.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner() {
+      return request.auth != null
+          && request.auth.uid == 'us4AEjRgfadGLxj6CGY9ugRH7o72';
+    }
+
+    // Same charset the client slugifies tag names into (src/lib/slug.ts):
+    // lowercase, hyphen-separated, 1-40 chars. Posts reference tags by this
+    // string directly rather than by a separate id, so the pattern has to
+    // stay identical on both sides or a post's tags silently stop matching
+    // the tags collection.
+    function validTagId(id) {
+      return id.matches('^[a-z0-9]+(-[a-z0-9]+)*$') && id.size() <= 40;
+    }
+
+    // hasOnly blocks field injection into documents we render.
+    function validPost() {
+      return request.resource.data.keys().hasOnly(['title', 'content', 'description', 'image', 'date', 'lastEdited', 'tags', 'pinned'])
+          && request.resource.data.title is string
+          && request.resource.data.title.size() > 0
+          && request.resource.data.title.size() < 200
+          && request.resource.data.content is string
+          && request.resource.data.content.size() < 100000
+          // Optional. Shown on the blog index and as the og:description, so
+          // it is prose, bounded generously: the admin form nudges toward 200
+          // but a hard stop belongs here.
+          && (!('description' in request.resource.data) || (
+               request.resource.data.description is string
+               && request.resource.data.description.size() > 0
+               && request.resource.data.description.size() < 600
+             ))
+          // Optional. It ends up in an og:image on a prerendered page, so it
+          // must be a URL and nothing else - a javascript: or data: value here
+          // would be copied verbatim into everyone's HTML.
+          && (!('image' in request.resource.data) || (
+               request.resource.data.image is string
+               && request.resource.data.image.size() < 500
+               && (request.resource.data.image.matches('^https://.*')
+                   || request.resource.data.image.matches('^/[^/].*'))
+             ))
+          // Optional. Rules can't loop to check each entry's charset or that
+          // it exists in /tags - only isOwner() can write posts at all, and
+          // the admin UI only ever writes ids it read from /tags, so that
+          // invariant is upheld by the client rather than enforced here.
+          && (!('tags' in request.resource.data) || (
+               request.resource.data.tags is list
+               && request.resource.data.tags.size() <= 10
+             ))
+          // Optional. Sticky-to-top flag on the blog index, toggled from the
+          // entries list rather than the edit form.
+          && (!('pinned' in request.resource.data) || request.resource.data.pinned is bool);
+    }
+
+    match /posts/{postId} {
+      // Spelled out rather than `read` to document that listing the whole
+      // collection publicly is intentional - the blog index does exactly that.
+      allow get, list: if true;
+
+      // date == request.time forces serverTimestamp() and prevents backdating.
+      allow create: if isOwner()
+                    && validPost()
+                    && request.resource.data.date == request.time;
+
+      // updateDoc merges, so request.resource.data is the full document -
+      // which is why both hasOnly() and the unchanged-date check hold here.
+      allow update: if isOwner()
+                    && validPost()
+                    && request.resource.data.date == resource.data.date
+                    && request.resource.data.lastEdited == request.time;
+
+      allow delete: if isOwner();
+    }
+
+    match /tags/{tagId} {
+      allow get, list: if true;
+
+      // The doc id IS the tag (no separate name field to fall out of sync
+      // with it) - so the only thing worth validating on write is that id,
+      // and that nothing else got smuggled into the document body.
+      allow create: if isOwner()
+                    && validTagId(tagId)
+                    && request.resource.data.keys().hasOnly(['createdAt'])
+                    && request.resource.data.createdAt == request.time;
+
+      // No update: renaming isn't supported. Deleting and recreating a tag
+      // is destroy-then-create, which is exactly the two operations this
+      // was asked for.
+      allow delete: if isOwner();
+    }
+
+    // Deny everything else. This is already the default; stating it documents
+    // that nothing else in the project is meant to be reachable.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

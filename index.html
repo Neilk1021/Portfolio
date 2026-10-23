@@ -2,9 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>untitled</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#040A1A" />
+
+    <!--
+      Everything between the @head markers is REPLACED, verbatim and per URL, by
+      scripts/prerender.tsx during `npm run build`. What is written here is the
+      home page's own set; every other URL gets its own file in dist/ carrying
+      its own title, description and image.
+
+      Do not delete or reword the markers - the prerender fails the build if it
+      cannot find both of them. Tags that are identical on every page (icon,
+      viewport, theme-color) belong ABOVE the block, or they'd be duplicated.
+    -->
+    <!-- @head:start -->
+    <title>Neil Ketteringham // cnel.info</title>
+    <meta
+      name="description"
+      content="Neil Ketteringham - CS undergrad at UC Irvine, undergraduate researcher on Apache Texera, lead programmer at Antikat Studios. Games, graphics and systems programming."
+    />
+    <link rel="canonical" href="https://cnel.info/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="cnel.info" />
+    <meta property="og:url" content="https://cnel.info/" />
+    <meta property="og:title" content="Neil Ketteringham" />
+    <meta
+      property="og:description"
+      content="Games, graphics and systems programming. Apache Texera researcher, lead programmer at Antikat Studios."
+    />
+    <meta property="og:image" content="https://cnel.info/og-default.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A night rooftop scene from Japanese Salaryman" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Neil Ketteringham" />
+    <meta
+      name="twitter:description"
+      content="Games, graphics and systems programming. Apache Texera researcher, lead programmer at Antikat Studios."
+    />
+    <meta name="twitter:image" content="https://cnel.info/og-default.jpg" />
+    <!-- @head:end -->
   </head>
   <body>
     <div id="root"></div>

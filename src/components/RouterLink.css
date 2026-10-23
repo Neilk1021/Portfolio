@@ -1,9 +1,20 @@
-.RouterLink{
-    background-color: #040A1A;
-    font-family: 'JetBrains Mono', monospace;
-    color: #53CBFA;
-    padding: 5px 20px;
-    text-align: left;
-    border: none;
-    font-size: smaller;
+.RouterLink {
+  font-family: var(--font-mono);
+  color: var(--fg);
+  padding: var(--sp-1) 0;
+  text-align: left;
+  border: none;
+  font-size: var(--fs-small);
+  text-decoration: none;
+  width: fit-content;
+  transition: color var(--t-fast), transform var(--t-fast);
+  transform-origin: left center;
+}
+
+.RouterLink:hover,
+.RouterLink:focus-visible {
+  color: var(--fg-bright);
+  transform: scale(1.05);
+  outline: none;
+  text-decoration: underline;
 }

@@ -1,0 +1,321 @@
+/* .MarkdownContent and .Content were referenced by BlogPostDetail but defined
+   nowhere, so post headings rendered at UA default sizes and markdown links
+   rendered browser-blue. */
+
+.Content {
+  padding: var(--sp-5) 0;
+}
+
+/* Long-form prose ---------------------------------------------------------- */
+
+/* The cap has to be lifted on the WRAPPER too: .TerminalContent sets
+   max-width: var(--measure) itself, so widening .MarkdownContent alone would
+   have done nothing at all. */
+.TerminalContent--prose { max-width: var(--measure-prose); }
+
+.MarkdownContent { max-width: var(--measure-prose); }
+
+/* The breadcrumb used to carry the whole post title with every space turned
+   into an underscore, so a long name wrapped across two lines of h1 and read
+   as a filename. The breadcrumb now stops at Blog and the title lives here,
+   spaces intact. */
+.PostTitle {
+  font-size: 1.6rem;
+  line-height: 1.3;
+  color: var(--fg);
+  margin: 0 0 var(--sp-2);
+}
+
+.TerminalContent--prose .PostMeta { margin: 0 0 var(--sp-5); }
+
+/* These headings previously set font-size and nothing else, so they inherited
+   the UA default 0.83em margin: LESS space above a section heading than
+   between two paragraphs, which is why no heading read as a section break.
+   Each one now takes a large space above and a small one below, so it binds to
+   the text it introduces instead of floating between blocks. */
+.MarkdownContent h1 { font-size: 1.5rem;  color: var(--fg); margin: var(--sp-6) 0 var(--sp-3); }
+.MarkdownContent h2 { font-size: 1.3rem;  color: var(--fg); margin: var(--sp-6) 0 var(--sp-3); }
+.MarkdownContent h3 { font-size: 1.1rem;  color: var(--fg); margin: var(--sp-5) 0 var(--sp-2); }
+.MarkdownContent h4 { font-size: 0.95rem; color: var(--fg); margin: var(--sp-4) 0 var(--sp-2); }
+
+/* The title and timestamp already supply the space above the first block. */
+.MarkdownContent > :first-child { margin-top: 0; }
+
+/* p carried no margin and no line-height, falling back to the browser's 1em
+   and the global 1.5. That put the gap between paragraphs at roughly the gap
+   between lines, so the whole post read as one slab of text. */
+.MarkdownContent p {
+  color: var(--fg-bright);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  margin: 0 0 var(--sp-4);
+}
+
+.MarkdownContent ul,
+.MarkdownContent ol {
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-4);
+}
+
+.MarkdownContent li {
+  color: var(--fg-bright);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  margin-bottom: var(--sp-2);
+}
+
+.MarkdownContent a {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+.MarkdownContent a:hover,
+.MarkdownContent a:focus-visible {
+  color: var(--fg-bright);
+}
+
+.MarkdownContent code {
+  background: var(--fg-a15);
+  border: 1px solid var(--fg-a30);
+  padding: 1px 4px;
+  font-size: 0.85em;
+  color: var(--fg);
+}
+
+/* overflow-x here is load-bearing: long code lines are the single biggest
+   source of horizontal page scroll on a phone. */
+.MarkdownContent pre {
+  background: var(--bg-inset);
+  border: 1px solid var(--fg-a30);
+  padding: var(--sp-3);
+  overflow-x: auto;
+  font-size: var(--fs-small);
+  margin: 0 0 var(--sp-4);
+}
+
+.MarkdownContent pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.MarkdownContent blockquote {
+  margin: var(--sp-4) 0;
+  padding-left: var(--sp-3);
+  border-left: var(--rule-dash);
+  font-style: italic;
+  color: var(--fg);
+}
+
+.MarkdownContent table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  margin: 0 0 var(--sp-4);
+  display: block;
+  overflow-x: auto;
+}
+
+.MarkdownContent th,
+.MarkdownContent td {
+  border: 1px solid var(--fg-a30);
+  padding: var(--sp-1) var(--sp-2);
+  text-align: left;
+  color: var(--fg-bright);
+}
+
+.MarkdownContent th { color: var(--fg); }
+
+.MarkdownContent hr {
+  border: 0;
+  border-top: var(--rule-dash);
+  margin: var(--sp-5) 0;
+}
+
+/* Tags ----------------------------------------------------------------------
+   Same look as inline `code` (fg-a15 fill, fg-a30 border) so a tag chip reads
+   as part of the terminal rather than a bolted-on badge widget. */
+.TagPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.TagPill {
+  display: inline-block;
+  font-family: inherit;
+  font-size: var(--fs-micro);
+  line-height: 1.6;
+  color: var(--fg);
+  background: var(--fg-a15);
+  border: 1px solid var(--fg-a30);
+  padding: 1px 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+
+.TagPill:hover,
+.TagPill:focus-visible {
+  background: var(--fg-a30);
+  color: var(--fg-bright);
+}
+
+.TagPill--active {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.TagPill--active:hover,
+.TagPill--active:focus-visible {
+  background: var(--fg);
+  color: var(--bg);
+  opacity: 0.85;
+}
+
+/* Post list ---------------------------------------------------------------- */
+.PostCard {
+  margin-bottom: var(--sp-5);
+  border-bottom: var(--rule-dash);
+  padding-bottom: var(--sp-4);
+}
+
+/* No frame on a pinned card. A left rule met the card's bottom rule and drew
+   an open half-box; a full box fought the separator below it. The [ PINNED ]
+   label carries the meaning, and every card keeps the same geometry. */
+
+/* Bracketed uppercase label, the same convention as [MERGED] / [ OPEN ] in the
+   GitHub feed, so the marker reads as terminal output and not as an emoji. */
+.PinBadge {
+  display: inline-block;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.05em;
+  color: var(--fg);
+  opacity: 0.7;
+  margin-bottom: var(--sp-1);
+}
+
+.PostCard h2 {
+  font-size: 1.3rem;
+  margin: 0 0 var(--sp-1);
+}
+
+.PostCard a { text-decoration: none; }
+
+.PostCard a:hover h2,
+.PostCard a:focus-visible h2 { color: var(--fg-bright); }
+
+.PostMeta {
+  font-size: var(--fs-micro);
+  opacity: 0.7;
+}
+
+/* The index preview. Was an inline `white-space: pre-wrap`, which preserved
+   every newline of raw markdown; the text is a single prose line now. */
+.PostExcerpt {
+  color: var(--fg-bright);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  margin: var(--sp-2) 0 var(--sp-3);
+}
+
+/* Admin form -------------------------------------------------------------- */
+.AdminGrid {
+  display: flex;
+  gap: var(--sp-5);
+  align-items: flex-start;
+}
+
+.AdminGrid > * { flex: 1; min-width: 0; }
+
+.TerminalInput,
+.TerminalTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-inset);
+  border: 1px solid var(--fg-a40);
+  color: var(--fg);
+  padding: var(--sp-2);
+  font-size: var(--fs-small);
+}
+
+/* The original inline styles set `outline: none` with no replacement, so the
+   admin form had no visible focus indicator at all. */
+.TerminalInput:focus-visible,
+.TerminalTextarea:focus-visible {
+  outline: 2px solid var(--fg-bright);
+  outline-offset: 2px;
+}
+
+.TerminalInput::placeholder,
+.TerminalTextarea::placeholder {
+  color: var(--fg-a40);
+}
+
+.TerminalTextarea {
+  min-height: 24rem;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* The description is two or three lines, not a post body. */
+.TerminalTextarea--short { min-height: 5rem; }
+
+.AdminHint {
+  font-size: var(--fs-micro);
+  opacity: 0.7;
+  margin: var(--sp-1) 0 0;
+}
+
+.AdminHint--over {
+  color: var(--danger);
+  opacity: 1;
+}
+
+.AdminButton {
+  background: transparent;
+  border: var(--border);
+  color: var(--fg);
+  padding: var(--sp-2) var(--sp-3);
+  cursor: pointer;
+  font-size: var(--fs-small);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+
+.AdminButton:hover,
+.AdminButton:focus-visible {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.AdminButton--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.AdminButton--danger:hover,
+.AdminButton--danger:focus-visible {
+  background: var(--danger);
+  color: var(--bg);
+}
+
+.AdminRow {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-top: var(--sp-3);
+}
+
+.EntryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-2);
+  border-bottom: 1px solid var(--rule);
+  padding: var(--sp-2) 0;
+  font-size: var(--fs-small);
+}
+
+@media (max-width: 900px) {
+  .AdminGrid { flex-direction: column; }
+}

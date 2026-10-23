@@ -1,0 +1,120 @@
+.SectionLabel {
+  color: var(--fg);
+  font-size: var(--fs-body);
+  letter-spacing: 0.08em;
+  margin-top: var(--sp-5);
+  padding-bottom: var(--sp-1);
+  border-bottom: 1px solid var(--fg-a30);
+}
+
+.SectionLabel:first-child {
+  margin-top: 0;
+}
+
+.Entry {
+  /* The Entry owns its vertical rhythm through `gap`, and its children are
+     margin-zeroed below. Previously every child brought its own margin, and
+     one class was applied both to a block <p> and to a flex item inside
+     .EntryHead - where the same vertical margin inflated the row height and
+     gave each line of the block a different rhythm. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3) 0;
+}
+
+/* Rule only BETWEEN adjacent entries. A border-bottom on every entry left a
+   dashed line hanging under the last one in a section, directly above the next
+   section heading's own underline. */
+.Entry + .Entry {
+  border-top: var(--rule-dash);
+}
+
+.Entry > * {
+  margin: 0;
+}
+
+/* The STACK line is meta, not part of the bullet list, so it needs to read as
+   separate from it rather than as another bullet. */
+.Entry > .StackRow {
+  margin-top: var(--sp-2);
+}
+
+.EntryHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.EntryOrg {
+  color: var(--fg);
+  font-size: var(--fs-body);
+}
+
+.EntryOrg a {
+  text-decoration: none;
+}
+
+.EntryOrg a:hover,
+.EntryOrg a:focus-visible {
+  color: var(--fg-bright);
+  text-decoration: underline;
+}
+
+.EntryDate {
+  color: var(--fg);
+  opacity: 0.65;
+  font-size: var(--fs-micro);
+  white-space: nowrap;
+}
+
+/* Role title / degree / school. Works as a block or as a flex item, because
+   it carries no vertical margin of its own. */
+.EntrySub {
+  font-style: italic;
+  color: var(--fg-bright);
+  font-size: var(--fs-small);
+}
+
+.StackRow {
+  font-size: var(--fs-micro);
+  color: var(--fg);
+  opacity: 0.8;
+}
+
+.StackLabel {
+  opacity: 0.65;
+  margin-right: var(--sp-2);
+}
+
+.SkillList {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--sp-2) var(--sp-3);
+  margin: var(--sp-3) 0;
+  font-size: var(--fs-small);
+}
+
+.SkillList dt {
+  color: var(--fg);
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+.SkillList dd {
+  margin: 0;
+  color: var(--fg-bright);
+}
+
+@media (max-width: 560px) {
+  .SkillList { grid-template-columns: 1fr; gap: 0 0; }
+  .SkillList dt { margin-top: var(--sp-2); }
+}
+
+/* index.css gives .LinkRow generous margins for use inside body copy; inside
+   an Entry the gap already provides the spacing. */
+.Entry > .LinkRow {
+  margin: var(--sp-2) 0 0;
+}

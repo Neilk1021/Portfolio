@@ -1,0 +1,260 @@
+/* Media column for project pages: trailer embed + screenshot gallery.
+   Shared layout primitives (.Page, .body, .Left, .Right) live in index.css. */
+
+.MediaHeader {
+  margin: var(--sp-2) 0;
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
+
+.VideoEmbed {
+  position: relative;
+  width: 100%;
+  /* the 1px border would otherwise add 2px past a 100% width */
+  box-sizing: border-box;
+  padding-bottom: 56.25%;
+  height: 0;
+  border: var(--border);
+  background: var(--bg-inset);
+}
+
+.VideoEmbed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gallery ---------------------------------------------------------------- */
+.Gallery {
+  width: 100%;
+  box-sizing: border-box;
+  border: var(--border);
+  background-color: var(--bg-inset);
+}
+
+.GalleryViewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.GalleryTrack {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  transition: transform var(--t-slow);
+}
+
+.GallerySlide {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.GallerySlide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+  /* these are pixel-art and low-poly captures - don't let the browser
+     smooth them into mush when it scales them down */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.GalleryControls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  border-top: 1px solid var(--fg-a30);
+  padding: var(--sp-1) var(--sp-2);
+  /* sits above the slide track, which slides under it */
+  position: relative;
+  z-index: 1;
+}
+
+.GalleryNav {
+  background: none;
+  border: 1px solid var(--fg-a40);
+  color: var(--fg);
+  /* 28px minimum so this is actually hittable with a mouse or a thumb */
+  min-width: 28px;
+  min-height: 28px;
+  font-size: var(--fs-small);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  flex: none;
+}
+
+.GalleryDots {
+  display: flex;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: none;
+}
+
+.GalleryDot {
+  background: none;
+  border: 1px solid var(--fg-a40);
+  color: var(--fg);
+  min-width: 28px;
+  min-height: 28px;
+  font-size: var(--fs-micro);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.GalleryDot[aria-current='true'] {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.GalleryNav:hover,
+.GalleryDot:hover {
+  border-color: var(--fg);
+  color: var(--fg-bright);
+}
+
+.GalleryNav:focus-visible,
+.GalleryDot:focus-visible {
+  outline: 2px solid var(--fg-bright);
+  outline-offset: 1px;
+}
+
+.GalleryCaption {
+  font-size: var(--fs-micro);
+  color: var(--fg);
+  opacity: 0.7;
+  /* min-width:0 is required: without it a nowrap flex item refuses to shrink
+     below its content width and overflows the control bar. */
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  /* the caption is the first thing to go when there's no room for it */
+  .GalleryCaption { display: none; }
+}
+
+/* Primary CTA ------------------------------------------------------------ */
+.SteamButton {
+  display: block;
+  border: var(--border);
+  padding: var(--sp-3) var(--sp-4);
+  color: var(--fg);
+  text-decoration: none;
+  transition: background var(--t-fast), color var(--t-fast), box-shadow var(--t-fast);
+  margin-top: var(--sp-5);
+  font-size: var(--fs-small);
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.SteamButton:hover,
+.SteamButton:focus-visible {
+  background: var(--fg);
+  color: var(--bg);
+  box-shadow: 0 0 20px var(--fg-a40);
+  outline: none;
+}
+
+/* Award callout, used by the jam winners ---------------------------------- */
+.Awards {
+  border: 1px solid var(--fg-a40);
+  padding: var(--sp-2) var(--sp-3);
+  margin: var(--sp-3) 0;
+}
+
+.Awards ul { margin: 0; }
+
+.Awards li {
+  font-size: var(--fs-small);
+  color: var(--fg);
+}
+
+/* Compact one-line entries on the index pages ----------------------------- */
+.CompactList {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-3) 0 0;
+}
+
+.CompactEntry {
+  border-top: var(--rule-dash);
+  padding: var(--sp-3) 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.CompactEntry .name {
+  color: var(--fg);
+  font-size: var(--fs-body);
+}
+
+.CompactEntry .tagline {
+  color: var(--fg-bright);
+  font-size: var(--fs-small);
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.CompactEntry .facet {
+  font-size: var(--fs-micro);
+  color: var(--fg);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.CompactEntry .note {
+  flex-basis: 100%;
+  font-size: var(--fs-micro);
+  color: var(--fg-bright);
+  opacity: 0.75;
+}
+
+/* Cards linking to full project pages ------------------------------------- */
+.ProjectCard {
+  display: block;
+  border: 1px solid var(--fg-a30);
+  padding: var(--sp-3);
+  margin-bottom: var(--sp-3);
+  text-decoration: none;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.ProjectCard:hover,
+.ProjectCard:focus-visible {
+  border-color: var(--fg);
+  background: var(--fg-a15);
+  outline: none;
+}
+
+.ProjectCard h2 { margin: 0 0 var(--sp-1); }
+.ProjectCard p  { margin: 0; }
+
+.CodeBlock {
+  background: var(--bg-inset);
+  border: 1px solid var(--fg-a30);
+  padding: var(--sp-3);
+  /* long lines scroll inside the block rather than widening the page */
+  overflow-x: auto;
+  font-size: var(--fs-small);
+  color: var(--fg-bright);
+  margin: var(--sp-3) 0;
+  line-height: 1.6;
+}

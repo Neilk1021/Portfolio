@@ -1,0 +1,85 @@
+.GithubFeed {
+  max-width: var(--measure);
+}
+
+.FeedTotals {
+  color: var(--fg);
+  font-size: var(--fs-small);
+  margin-bottom: var(--sp-4);
+}
+
+.RepoGroup {
+  border-top: var(--rule-dash);
+  padding: var(--sp-3) 0;
+}
+
+.RepoHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.RepoName {
+  color: var(--fg);
+  font-size: var(--fs-body);
+  text-decoration: none;
+}
+
+.RepoName:hover,
+.RepoName:focus-visible {
+  color: var(--fg-bright);
+  text-decoration: underline;
+}
+
+.RepoCounts {
+  font-size: var(--fs-micro);
+  color: var(--fg);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.PrList {
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-1) 0 0;
+}
+
+.PrList li {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: baseline;
+  padding: 2px 0;
+  min-width: 0;
+}
+
+.PrState {
+  font-size: var(--fs-micro);
+  white-space: nowrap;
+  flex: none;
+}
+
+/* Status colours reuse existing tokens rather than adding new ones - that's
+   what keeps this reading as part of the terminal, not a badge widget. */
+.PrState--merged { color: var(--fg); }
+.PrState--open   { color: var(--fg-bright); }
+.PrState--closed { color: var(--danger); }
+
+.PrLink {
+  font-size: var(--fs-small);
+  color: var(--fg-bright);
+  text-decoration: none;
+  /* CSS truncation, not substring - the full title stays in the DOM and in
+     the link's accessible name */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.PrLink:hover,
+.PrLink:focus-visible {
+  color: var(--fg);
+  text-decoration: underline;
+}
