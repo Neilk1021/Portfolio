@@ -58,7 +58,7 @@ export default function HomeBanner() {
       <p className="BannerName">{profile.name}</p>
       <p className="BannerLede">
         Computer science undergrad at {education.shortName}, graduating {education.graduation}.
-        I build games, and the systems underneath them.
+        I make things, some people think they're kinda cool.
       </p>
 
       <dl className="BannerRows">

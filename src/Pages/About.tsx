@@ -18,6 +18,7 @@ export default function About() {
         <p className="Quote">"{profile.bio}"</p>
 
         <h2>{'> SYSTEMS'}</h2>
+
         <p>
           I'm an undergraduate researcher on Apache Texera, an incubating Apache project. I work on
           test-harness internals: a JVM-wide singleton with HikariCP pooling and in-memory DDL
